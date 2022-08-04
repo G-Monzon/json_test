@@ -124,8 +124,9 @@ def get_summary(text):
     return dict_resumen
 
 
-if __name__ == '__main__':
-    """Se descomenta el código de la función que se va a utilizar realmente, o se usa una archivo JSON o un string"""
+def main():
+    """Se descomenta uno de los "json_convertido" que se va a utilizar realmente,
+     o se usa una archivo JSON o un string"""
     # json_convertido = summary_from_file('./ejemplo_facturas_nubarium.JSON')
     json_convertido = summary_from_string(ejemplo_json_string)
     get_summary(json_convertido)
@@ -133,4 +134,8 @@ if __name__ == '__main__':
     listas_recibidas = get_received_invoices_xml(json_convertido)
     print(f'Lista de XML de facturas recibidas: {listas_recibidas}')
     print(f'Lista de XML de facturas emitidas: {lista_emitidas}')
+
+
+if __name__ == '__main__':
+    main()
 
