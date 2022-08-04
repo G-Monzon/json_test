@@ -1,4 +1,7 @@
-"""Este módulo permite obtener los 3 datos principales del resumen de facturación obtenido de Nubarium"""
+"""
+Este módulo permite obtener los 3 datos principales del
+resumen de facturación obtenido de Nubarium
+"""
 import json
 from decimal import Decimal
 from get_base64_xml_lists import get_sent_invoices_xml, get_received_invoices_xml
@@ -97,22 +100,39 @@ ejemplo_json_string = '''{
 
 
 def summary_from_file(json_filepath):
-    """Convierte un archivo JSON a Python"""
+    """
+    Convierte un archivo JSON a Python.
+    Toma como único parámetro el string del filepath del archivo JSON.
+    """
     with open(json_filepath, 'r') as f:
         json_text = json.load(f)
         return json_text
 
 
 def summary_from_string(json_string):
-    """Convierte un String de JSON a Python"""
+    """
+    Convierte un String de JSON a Python.
+    Su único parámetro acepta un String que contenga los datos de Nubarium
+    de "Get invoices from SAT with CIEC".
+    """
     json_text = json.loads(json_string)
     return json_text
 
 
 def get_summary(text):
-    """Devuelve en 3 variables de tipo Decimal el total de las facturas"""
-    # Decimal permite precisión mejorada para valores monetarios.
-    # Del JSON se obtienen los datos en Strings, se eliminan los '$' y las comas.
+    """
+    Devuelve en 3 variables de tipo Decimal el total de las facturas en forma
+    de un diccionario, ejemplo:
+
+    dict_resumen = {
+        'totalEmitidas': Total de facturación emitida en el mes,
+        'totalRecibidas': Total de facturación recibida en el mes,
+        'totalDiferencia': Total de la diferencia (emitida - recibida)
+    }
+
+    Decimal permite precisión mejorada para valores monetarios.
+    Del JSON se obtienen los datos en Strings, se eliminan los '$' y las comas.
+    """
     total_emitidas = Decimal((text['totalEmitidas']).replace('$', '').replace(',', ''))
     total_recibidas = Decimal((text['totalRecibidas']).replace('$', '').replace(',', ''))
     total_diferencia = Decimal((text['totalDiferencia']).replace('$', '').replace(',', ''))
@@ -125,8 +145,14 @@ def get_summary(text):
 
 
 def main():
-    """Se descomenta uno de los "json_convertido" que se va a utilizar realmente,
-     o se usa una archivo JSON o un string"""
+    """
+    Se descomenta uno de los "json_convertido" que se va a utilizar realmente,
+    o se usa una archivo JSON o un string.
+    Por "default" se emplea el JSON en string, si se va a emplear un archivo
+    JSON se debe de comentar la línea que llama a la función
+    "summary_from_string" y se debe de descomentar la línea que llama
+    a la función "summary_from_file".
+    """
     # json_convertido = summary_from_file('./ejemplo_facturas_nubarium.JSON')
     json_convertido = summary_from_string(ejemplo_json_string)
     get_summary(json_convertido)
@@ -138,4 +164,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
