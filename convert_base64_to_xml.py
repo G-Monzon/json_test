@@ -8,15 +8,9 @@ def decode64(encoded_string):
     return xml_string
 
 
-# def write_xml(xml_string, index):
-#     xml_name = f'factura{index}.xml'
-#     with open(xml_name, "w", encoding="utf-8") as f:
-#         f.write(xml_string)
-
-
 def main():
     decoded_xml = (decode64('base64_string'))
-    write_xml(decoded_xml)
+    return decoded_xml
 
 
 if __name__ == "__main__":
