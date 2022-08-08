@@ -1,7 +1,5 @@
 """
-Este módulo permite obtener los 3 datos principales del
-resumen de facturación obtenido de Nubarium.
-También llama al módulo que crea las listas de los XML en base64.
+WIP
 """
 import json
 #from decimal import Decimal
@@ -145,10 +143,7 @@ def json_to_python(json_string):
 
 
 def main():
-    """
-
-    """
-    # json_convertido = summary_from_file('./ejemplo_facturas_nubarium.JSON')
+    pass
 
 
 if __name__ == '__main__':

@@ -2,16 +2,18 @@
 Este módulo será el que llame a las funciones de los demás módulos para obtener la información
 necesaria para trabajar en Pandas.
 
+A su vez, este módulo será llamado para indicar el mes y año de la consulta de las facturas.
+
 Sigue en construcción, Work In Progress (WIP)
 """
 
-from get_summary_info import json_to_python
+from json_to_python import json_to_python
 from get_base64_xml_lists import get_received_invoices_xml, get_sent_invoices_xml
 from convert_base64_to_xml import decode64
 from get_xml_items import process_xml_tree
 
-# Este es un ejemplo de la información que obtendríamos de Nubarium, es un string en formato JSON
-json_string_completo = '''{
+# Este es un ejemplo de la información que obtendríamos de Nubarium, es un string en formato JSON.
+json_string_prueba = '''{
     "totalEmitidas": "$200,000.14",
     "facturasEmitidas": [
         {
@@ -85,43 +87,47 @@ json_string_completo = '''{
 
 
 # Esta es la función principal
-def listas_anidadas_conceptos(json_string):
+def listas_anidadas_conceptos(json_string, mes, anio):
     json_convertido = json_to_python(json_string)
 
     facturas_emitidas_codificadas = get_sent_invoices_xml(json_convertido)
     facturas_recibidas_codificadas = get_received_invoices_xml(json_convertido)
 
-    conceptos_emitidos_mes = []
-    conceptos_recibidos_mes = []
+    lista_conceptos_emitidas = []
+    lista_conceptos_recibidas = []
 
-    # print(f'Hay {len(facturas_emitidas_codificadas)} facturas emitidas.')
+    print(f'Hay {len(facturas_emitidas_codificadas)} facturas emitidas.')
     for index, factura_emitida_codificada in enumerate(facturas_emitidas_codificadas):
         factura_emitida_decodificada = decode64(factura_emitida_codificada)
-        lista_conceptos_factura = process_xml_tree(factura_emitida_decodificada)
-        # print(f'\nLa factura {index + 1} tiene {len(lista_conceptos_factura)} conceptos.')
-        # print(f'Los conceptos son:')
-        # for ind, concepto in enumerate(lista_conceptos_factura):
-        #     print(f'El concepto {ind + 1} de la factura {index + 1} es: {concepto}')
-        conceptos_emitidos_mes.append(lista_conceptos_factura)
+        concepto_emitido = process_xml_tree(factura_emitida_decodificada, mes, anio)
+        lista_conceptos_emitidas.append(concepto_emitido)
+        print(f'\nLa factura {index + 1} tiene {len(lista_conceptos_emitidas)} conceptos.')
+        print(f'Los conceptos son:')
+        for ind, concepto in enumerate(lista_conceptos_emitidas):
+            print(f'El concepto {ind + 1} de la factura {index + 1} es: {concepto}')
+        return lista_conceptos_emitidas
 
-    # print(f'\nHay {len(facturas_recibidas_codificadas)} facturas recibidas.')
+    print(f'\nHay {len(facturas_recibidas_codificadas)} facturas recibidas.')
     for index, factura_recibida_codificada in enumerate(facturas_recibidas_codificadas):
         factura_recibida_decodificada = decode64(factura_recibida_codificada)
-        lista_conceptos_factura = process_xml_tree(factura_recibida_decodificada)
-        # print(f'\nLa factura {index+1} tiene {len(lista_conceptos_factura)} conceptos.')
-        # print(f'Los conceptos son:')
-        # for ind, concepto in enumerate(lista_conceptos_factura):
-        #     print(f'El concepto {ind+1} de la factura {index+1} es: {concepto}')
-        conceptos_recibidos_mes.append(lista_conceptos_factura)
-    return conceptos_emitidos_mes, conceptos_recibidos_mes
+        concepto_recibido = process_xml_tree(factura_recibida_decodificada, mes, anio)
+        lista_conceptos_recibidas.append(concepto_recibido)
+        print(f'\nLa factura {index+1} tiene {len(lista_conceptos_recibidas)} conceptos.')
+        print(f'Los conceptos son:')
+        for ind, concepto in enumerate(lista_conceptos_recibidas):
+            print(f'El concepto {ind+1} de la factura {index+1} es: {concepto}')
+        return lista_conceptos_recibidas
 
 
-def main(json_string_nubarium):
+def main(json_string_nubarium, mes, anio):
     conceptos_emitidos_mes, conceptos_recibidos_mes = listas_anidadas_conceptos(
-        json_string_nubarium)
+        json_string_nubarium, mes, anio)
     return conceptos_emitidos_mes, conceptos_recibidos_mes
 
 
 if __name__ == '__main__':
-    main(json_string_completo)
+    main(json_string_prueba, 0, 0)
+    # a, b = main(json_string_prueba, 0, 0)
+    # for x in a:
+    #     print(x)
 

@@ -3,6 +3,12 @@ Este módulo utiliza la librería ElementTree para obtener
 los datos de Concepto, Unidades, Valor Unitario y Total
 de un string que representa el contenido de un archivo
 XML de una factura.
+
+Se usa el módulo Decimal para convertir Strings (obtenidas del XML) en variables de tipo
+'Decimal' que son más precisas que las variables de tipo 'float'.
+
+Las variables que se quieran convertir en 'Decimal', se deben convertir desde Strings, no
+desde int o desde float, para darle precisión y evitar errores.
 """
 import xml.etree.ElementTree as ET
 from decimal import Decimal
@@ -40,13 +46,11 @@ from decimal import Decimal
 # </cfdi:Comprobante>'''
 
 
-def process_xml_tree(xml_string):
-    lista_diccionarios = []
+def process_xml_tree(xml_string, mes, anio):
     tree = create_tree(xml_string)
     for concepto in tree[2]:
-        dict_temp = get_concept_info(concepto)
-        lista_diccionarios.append(dict_temp)
-    return lista_diccionarios
+        dict_temp = get_concept_info(concepto, mes, anio)
+    return dict_temp
 
 
 def create_tree(new_xml_string):
@@ -54,13 +58,15 @@ def create_tree(new_xml_string):
     return root
 
 
-def get_concept_info(concepto):
+def get_concept_info(concepto, mes, anio):
     clave = concepto.get('ClaveProdServ')
     cantidad = concepto.get('Cantidad')
     clave_unidad = concepto.get('ClaveUnidad')
     valor_unitario = concepto.get('ValorUnitario')
     importe = concepto.get('Importe')
     dict_temporal = {
+        'mes': mes,
+        'anio': anio,
         'clave': clave,
         'cantidad': Decimal(cantidad),
         'clave_unidad': clave_unidad,
@@ -70,10 +76,9 @@ def get_concept_info(concepto):
     return dict_temporal
 
 
-def main(xml_string):
-    process_xml_tree(xml_string)
+def main(xml_string, mes, anio):
+    pass
 
 
 if __name__ == '__main__':
-    # main(some_xml)
     pass
