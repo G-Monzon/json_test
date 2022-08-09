@@ -71,8 +71,10 @@ def get_concept_info(concepto, mes, anio, tipo):
         'anio': anio,
         'tipo': tipo,
         'clave': clave,
+        'prod_serv': None,
         'cantidad': Decimal(cantidad),
         'clave_unidad': clave_unidad,
+        'unidad': None,
         'valor_unitario': Decimal(valor_unitario),
         'importe': Decimal(importe),
     }
