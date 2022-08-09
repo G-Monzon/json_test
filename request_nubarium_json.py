@@ -9,6 +9,8 @@ la llave "Authorization" y como valor:
 
     Basic user:password
 
+    Ej: header = {"Authorization" : "Basic cG9zdG1hbjpwYXNzd29yZA=="}
+
 La parte "user:password" es en base64.
 """
 # Este import es solo para hacer pruebas, el string real debe llegar a este módulo
@@ -31,7 +33,7 @@ def solicitar_facturacion_mes(rfc, password, mes, anio):
 
 
 def payload_mes_nubarium(p_rfc, p_password, p_mes, p_anio,
-                         p_ordenar_por='monto',
+                         p_ordenar_por='fecha',  # Puede ser 'fecha' o 'monto'
                          p_incluir_xml='true',
                          p_url_nuestro_webhook='https://ejemplo.com/webhook/test'):
     payload_creado = f"""{{
