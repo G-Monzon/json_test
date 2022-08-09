@@ -67,16 +67,16 @@ def get_concept_info(concepto, mes, anio, tipo):
     valor_unitario = concepto.get('ValorUnitario')
     importe = concepto.get('Importe')
     dict_temporal = {
-        'mes': mes,
-        'anio': anio,
+        'mes': int(mes),
+        'anio': int(anio),
         'tipo': tipo,
         'clave': clave,
         'prod_serv': None,
-        'cantidad': Decimal(cantidad),
+        'cantidad': float(cantidad),
         'clave_unidad': clave_unidad,
         'unidad': None,
-        'valor_unitario': Decimal(valor_unitario),
-        'importe': Decimal(importe),
+        'valor_unitario': float(valor_unitario),
+        'importe': float(importe),
     }
     return dict_temporal
 
