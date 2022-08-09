@@ -5,9 +5,6 @@ los XML de las facturas del JSON proporcionado (debe ya estar
 leído por Python usando json.load() o json.loads()).
 """
 
-received_list = []
-sent_list = []
-
 
 def get_received_invoices_xml(json_text):
     """
@@ -16,6 +13,7 @@ def get_received_invoices_xml(json_text):
     :param json_text: Python object (diccionario en este caso).
     :return: list
     """
+    received_list = []
     for invoice in json_text['facturasRecibidas']:
         received_list.append(invoice['xml'])
     return received_list
@@ -28,6 +26,7 @@ def get_sent_invoices_xml(json_text):
     :param json_text: Python object (diccionario en este caso).
     :return: list
     """
+    sent_list = []
     for invoice in json_text['facturasEmitidas']:
         sent_list.append(invoice['xml'])
     return sent_list

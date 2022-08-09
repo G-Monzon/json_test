@@ -86,48 +86,53 @@ json_string_prueba = '''{
 }'''
 
 
-# Esta es la función principal
-def listas_anidadas_conceptos(json_string, mes, anio):
-    json_convertido = json_to_python(json_string)
-
-    facturas_emitidas_codificadas = get_sent_invoices_xml(json_convertido)
-    facturas_recibidas_codificadas = get_received_invoices_xml(json_convertido)
-
+def crear_conceptos_emitidos(json_python_string, mes, anio):
+    tipo = 'E'
     lista_conceptos_emitidas = []
-    lista_conceptos_recibidas = []
-
-    print(f'Hay {len(facturas_emitidas_codificadas)} facturas emitidas.')
+    facturas_emitidas_codificadas = get_sent_invoices_xml(json_python_string)
+    # print(f'Hay {len(facturas_emitidas_codificadas)} facturas emitidas.')
     for index, factura_emitida_codificada in enumerate(facturas_emitidas_codificadas):
         factura_emitida_decodificada = decode64(factura_emitida_codificada)
-        concepto_emitido = process_xml_tree(factura_emitida_decodificada, mes, anio)
-        lista_conceptos_emitidas.append(concepto_emitido)
-        print(f'\nLa factura {index + 1} tiene {len(lista_conceptos_emitidas)} conceptos.')
-        print(f'Los conceptos son:')
-        for ind, concepto in enumerate(lista_conceptos_emitidas):
-            print(f'El concepto {ind + 1} de la factura {index + 1} es: {concepto}')
-        return lista_conceptos_emitidas
+        conceptos_emitidos = process_xml_tree(factura_emitida_decodificada, mes, anio, tipo)
+        lista_conceptos_emitidas.append(conceptos_emitidos)
+        # print(f'\nLa factura {index + 1} tiene {len(lista_conceptos_emitidas[index])} conceptos.')
+        # print(f'Los conceptos son:')
+        # for lista in lista_conceptos_emitidas:
+        #     for ind, concepto in enumerate(lista):
+        #         print(f'El concepto {ind + 1} de la factura {index + 1} es: {concepto}')
+    return lista_conceptos_emitidas
 
-    print(f'\nHay {len(facturas_recibidas_codificadas)} facturas recibidas.')
+
+def crear_conceptos_recibidos(json_python_string, mes, anio):
+    tipo = 'R'
+    lista_conceptos_recibidas = []
+    facturas_recibidas_codificadas = get_received_invoices_xml(json_python_string)
+    # print(f'\nHay {len(facturas_recibidas_codificadas)} facturas recibidas.')
     for index, factura_recibida_codificada in enumerate(facturas_recibidas_codificadas):
         factura_recibida_decodificada = decode64(factura_recibida_codificada)
-        concepto_recibido = process_xml_tree(factura_recibida_decodificada, mes, anio)
-        lista_conceptos_recibidas.append(concepto_recibido)
-        print(f'\nLa factura {index+1} tiene {len(lista_conceptos_recibidas)} conceptos.')
-        print(f'Los conceptos son:')
-        for ind, concepto in enumerate(lista_conceptos_recibidas):
-            print(f'El concepto {ind+1} de la factura {index+1} es: {concepto}')
-        return lista_conceptos_recibidas
+        conceptos_recibidos = process_xml_tree(factura_recibida_decodificada, mes, anio, tipo)
+        lista_conceptos_recibidas.append(conceptos_recibidos)
+        # print(
+        #     f'\nLa factura {index + 1} tiene {len(lista_conceptos_recibidas[index])} conceptos.')
+        # print(f'Los conceptos son:')
+        # for lista in lista_conceptos_recibidas:
+        #     for ind, concepto in enumerate(lista):
+        #         print(f'El concepto {ind + 1} de la factura {index + 1} es: {concepto}')
+    return lista_conceptos_recibidas
 
 
-def main(json_string_nubarium, mes, anio):
-    conceptos_emitidos_mes, conceptos_recibidos_mes = listas_anidadas_conceptos(
-        json_string_nubarium, mes, anio)
-    return conceptos_emitidos_mes, conceptos_recibidos_mes
+def crear_lista_conceptos_mes(json_string_nubarium, mes, anio):
+    json_convertido = json_to_python(json_string_nubarium)
+    conceptos_emitidos = crear_conceptos_emitidos(json_convertido, mes, anio)
+    conceptos_recibidos = crear_conceptos_recibidos(json_convertido, mes, anio)
+    lista_temporal = [*conceptos_emitidos, *conceptos_recibidos]
+    lista_conceptos_mes = [x for y in lista_temporal for x in y]
+    # for x in lista_conceptos_mes:
+    #     print(x)
+    return lista_conceptos_mes
 
 
 if __name__ == '__main__':
-    main(json_string_prueba, 0, 0)
-    # a, b = main(json_string_prueba, 0, 0)
-    # for x in a:
-    #     print(x)
+    crear_lista_conceptos_mes(json_string_prueba, 0, 0)
+
 

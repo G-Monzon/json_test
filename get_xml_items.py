@@ -46,11 +46,13 @@ from decimal import Decimal
 # </cfdi:Comprobante>'''
 
 
-def process_xml_tree(xml_string, mes, anio):
+def process_xml_tree(xml_string, mes, anio, emitido):
+    temp_list = []
     tree = create_tree(xml_string)
     for concepto in tree[2]:
-        dict_temp = get_concept_info(concepto, mes, anio)
-    return dict_temp
+        dict_temp = get_concept_info(concepto, mes, anio, emitido)
+        temp_list.append(dict_temp)
+    return temp_list
 
 
 def create_tree(new_xml_string):
@@ -58,7 +60,7 @@ def create_tree(new_xml_string):
     return root
 
 
-def get_concept_info(concepto, mes, anio):
+def get_concept_info(concepto, mes, anio, tipo):
     clave = concepto.get('ClaveProdServ')
     cantidad = concepto.get('Cantidad')
     clave_unidad = concepto.get('ClaveUnidad')
@@ -67,6 +69,7 @@ def get_concept_info(concepto, mes, anio):
     dict_temporal = {
         'mes': mes,
         'anio': anio,
+        'tipo': tipo,
         'clave': clave,
         'cantidad': Decimal(cantidad),
         'clave_unidad': clave_unidad,
@@ -76,7 +79,7 @@ def get_concept_info(concepto, mes, anio):
     return dict_temporal
 
 
-def main(xml_string, mes, anio):
+def main():
     pass
 
 
