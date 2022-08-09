@@ -48,5 +48,3 @@ if __name__ == '__main__':
         meses_ejemplo,
         anios_ejemplo
     )
-    # for x in to_pandas:
-    #     print(x)
