@@ -3,8 +3,6 @@ WIP
 """
 import json
 
-nombre_cliente = ''
-
 # String de prueba
 string_prueba = '''{
     "totalEmitidas": "$200,000.14",
@@ -86,16 +84,17 @@ def json_to_python(json_string):
     de "Get invoices from SAT with CIEC".
     """
     json_text = json.loads(json_string)
-    get_nombre_cliente(json_text)
-    return json_text
+    nc = get_nombre_cliente(json_text)
+    return json_text, nc
 
 
 def get_nombre_cliente(json_text):
-    global nombre_cliente
     try:
         nombre_cliente = json_text['facturasEmitidas'][0]['razonSocialEmisor']
     except KeyError:
         nombre_cliente = json_text['facturasRecibidas'][0]['razonSocialReceptor']
+    return nombre_cliente
+
 
 # Resumen del JSON de Nubarium
 # def get_summary(text):
