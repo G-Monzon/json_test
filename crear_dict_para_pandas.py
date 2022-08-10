@@ -46,5 +46,7 @@ if __name__ == '__main__':
         rfc_ejemplo,
         password_ejemplo,
         meses_ejemplo,
-        anios_ejemplo
+        anios_ejemplo,
     )
+    # for x in to_pandas:
+    #     print(x)
