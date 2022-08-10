@@ -86,14 +86,14 @@ json_string_prueba = '''{
 }'''
 
 
-def crear_conceptos_emitidos(json_python_string, mes, anio):
+def crear_conceptos_emitidos(json_python_string, mes, anio, nombre_cliente):
     tipo = 'E'
     lista_conceptos_emitidas = []
     facturas_emitidas_codificadas = get_sent_invoices_xml(json_python_string)
     # print(f'Hay {len(facturas_emitidas_codificadas)} facturas emitidas.')
     for index, factura_emitida_codificada in enumerate(facturas_emitidas_codificadas):
         factura_emitida_decodificada = decode64(factura_emitida_codificada)
-        conceptos_emitidos = process_xml_tree(factura_emitida_decodificada, mes, anio, tipo)
+        conceptos_emitidos = process_xml_tree(factura_emitida_decodificada, mes, anio, tipo, nombre_cliente)
         lista_conceptos_emitidas.append(conceptos_emitidos)
         # print(f'\nLa factura {index + 1} tiene {len(lista_conceptos_emitidas[index])} conceptos.')
         # print(f'Los conceptos son:')
@@ -103,14 +103,15 @@ def crear_conceptos_emitidos(json_python_string, mes, anio):
     return lista_conceptos_emitidas
 
 
-def crear_conceptos_recibidos(json_python_string, mes, anio):
+def crear_conceptos_recibidos(json_python_string, mes, anio, nombre_cliente):
     tipo = 'R'
     lista_conceptos_recibidas = []
     facturas_recibidas_codificadas = get_received_invoices_xml(json_python_string)
     # print(f'\nHay {len(facturas_recibidas_codificadas)} facturas recibidas.')
     for index, factura_recibida_codificada in enumerate(facturas_recibidas_codificadas):
         factura_recibida_decodificada = decode64(factura_recibida_codificada)
-        conceptos_recibidos = process_xml_tree(factura_recibida_decodificada, mes, anio, tipo)
+        conceptos_recibidos = process_xml_tree(factura_recibida_decodificada, mes, anio, tipo,
+                                               nombre_cliente)
         lista_conceptos_recibidas.append(conceptos_recibidos)
         # print(
         #     f'\nLa factura {index + 1} tiene {len(lista_conceptos_recibidas[index])} conceptos.')
@@ -122,9 +123,9 @@ def crear_conceptos_recibidos(json_python_string, mes, anio):
 
 
 def crear_lista_conceptos_mes(json_string_nubarium, mes, anio):
-    json_convertido = json_to_python(json_string_nubarium)
-    conceptos_emitidos = crear_conceptos_emitidos(json_convertido, mes, anio)
-    conceptos_recibidos = crear_conceptos_recibidos(json_convertido, mes, anio)
+    json_convertido, nombre_cliente = json_to_python(json_string_nubarium)
+    conceptos_emitidos = crear_conceptos_emitidos(json_convertido, mes, anio, nombre_cliente)
+    conceptos_recibidos = crear_conceptos_recibidos(json_convertido, mes, anio, nombre_cliente)
     lista_temporal = [*conceptos_emitidos, *conceptos_recibidos]
     lista_conceptos_mes = [x for y in lista_temporal for x in y]
     # for x in lista_conceptos_mes:
